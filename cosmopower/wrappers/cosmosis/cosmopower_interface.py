@@ -74,8 +74,12 @@ def get_cosmopower_outputs(block, netname, data, config):
         if config['ell_factor']:
             prefac *= cp.util.ell_factor(block[cmb_cl, 'ell'], cl_type)
 
-        #ToDo: ambiguity of 'Cl' vs 'cmb_cl' here
-        block[cmb_cl, cl_type] = data * prefac * cp.util.cmb_unit_factor(cl_type, config['units'], 2.7255)
+        if cl_type == 'pp':
+            ell = block[cmb_cl, 'ell']
+            block[cmb_cl, cl_type] = 2.* np.pi * data * cp.util.cmb_unit_factor(cl_type, config['units'], 2.7255) / (ell*(ell + 1))
+        else:
+            #ToDo: ambiguity of 'Cl' vs 'cmb_cl' here
+            block[cmb_cl, cl_type] = data * prefac * cp.util.cmb_unit_factor(cl_type, config['units'], 2.7255)
 
         if config['lmax'] > 0:
             ell_select = block[cmb_cl, 'ell'] <= config['lmax']

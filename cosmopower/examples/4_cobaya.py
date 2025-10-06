@@ -74,10 +74,12 @@ params:
       min: 0.01
       max: 0.12
     ref: 0.05
-  H0:
-    derived: true
-  sigma8:
-    derived: true
+  h:
+    prior:
+      min: 0.6
+      max: 0.8
+    ref: 0.67
+
 """
 
 yaml = yaml_load(model)
@@ -85,13 +87,14 @@ yaml = yaml_load(model)
 install(yaml)
 
 # Create the cobaya model.
-model = get_model(model)
+model = get_model(yaml)
 
 # The best-fit values from the Planck paper.
 plik_best_fit = {
     "ombh2": 22.383e-3,
     "omch2": 12.011e-2,
     "cosmomc_theta": 104.0909e-4,
+    "h": 0.67,
     "logA": 3.0448,
     "ns": 0.96605,
     "tau": 0.0543,
