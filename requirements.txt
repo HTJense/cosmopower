@@ -8,5 +8,5 @@ matplotlib
 pytest
 pyDOE
 h5py
-tensorflow<2.14
-tensorflow_probability<0.22
+tensorflow>=2.18
+tensorflow_probability>=0.24
