@@ -73,7 +73,7 @@ def ell_factor(ls: np.ndarray, spectra: str) -> np.ndarray:
     elif spectra in ["pt", "pe", "pb", "tp", "ep", "bp"]:
         ellfac = ls * (ls + 1.0) / (2.0 * np.pi)
     elif spectra in ["pp"]:
-        ellfac = ls * (ls + 1.0) / (2.0 * np.pi)
+        ellfac = (ls * (ls + 1.0))**2. / (2.0 * np.pi)
 
     return ellfac
 

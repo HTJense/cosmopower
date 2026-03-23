@@ -8,7 +8,7 @@ from .util import *  # noqa: F401, F403
 
 
 __version__ = "0.2.0"
-__author__ = "Alessio Spurio Mancini, Hidde Jense, and Ian Harrison"
+__author__ = "Alessio Spurio Mancini"
 
 
 def get_cobaya_class():
