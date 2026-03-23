@@ -8,8 +8,5 @@ matplotlib
 pytest
 pyDOE
 h5py
-tensorflow
-tensorflow-probability
-tf-keras
-tf-keras-nightly
-tfp-nightly
+tensorflow>=2.18
+tensorflow_probability>=0.24
