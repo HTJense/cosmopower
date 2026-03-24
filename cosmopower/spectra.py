@@ -265,7 +265,7 @@ def generate_spectra(args: list = None) -> None:
 
     for n in tbar:
         tbar.set_description(("" if MPI is None else f"[{rank}] ")
-                             + f"{accepted/n:.1%} success rate")
+                             + f"{accepted/max(n,1):.1%} success rate")
 
         boltzmann_params = {k: training[k][n] for k in parser.boltzmann_inputs}
 
