@@ -540,7 +540,7 @@ class YAMLParser:
         samples = {}
         validation_samples = {}
         testing_samples = {}
-        generate_new = False
+        generate_new = force_new
 
         if not force_new:
             try:

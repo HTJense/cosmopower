@@ -27,3 +27,6 @@ notebooks/getting_started_notebooks/.ipynb_checkpoints
 notebooks/training_notebooks/.ipynb_checkpoints
 notebooks/*.DS_Store
 .DS_Store
+
+# example files
+cosmopower/examples/example
