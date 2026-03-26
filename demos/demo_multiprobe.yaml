@@ -1,4 +1,4 @@
-output: output/democp
+output: output/demo_multiprobe
 
 params:
   ombh2:
@@ -40,20 +40,21 @@ priors:
   tau_prior: "stats.norm.logpdf(tau, loc = 6.7e-2, scale = 2.3e-2)"
 
 sampler:
-  mcmc:
+  # mcmc:
+  evaluate:
 
 theory:
-  wrappers.cobaya.CosmoPower:
-    package_file: demos/camb_highacc.yaml
+  cosmopower:
+    package_file: ../cosmopower-organization/jense_2024_emulators/jense_2023_cmb_camb_lcdm.yaml
     provides:
       Cl:
         tt:
         te:
         ee:
-        # pp:
+        pp:
   camb:
-    extra_args:
-      lens_potential_accuracy: 8
+  #   extra_args:
+  #     lens_potential_accuracy: 8
     provides:
       angular_diameter_distance:
       Hubble:
