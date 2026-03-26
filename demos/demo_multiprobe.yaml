@@ -53,8 +53,6 @@ theory:
         ee:
         pp:
   camb:
-  #   extra_args:
-  #     lens_potential_accuracy: 8
     provides:
       angular_diameter_distance:
       Hubble:
