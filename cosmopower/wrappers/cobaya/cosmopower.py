@@ -282,6 +282,7 @@ class CosmoPower(BoltzmannBase):
 
         return cls
 
+
     def get_requirements(self):
 
         return self._params_required_by_networks

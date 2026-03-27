@@ -1,6 +1,6 @@
 # Set the location for the sampler outputs
 # (samples, restart, progress files etc).
-output: output/demo_multiprobe
+output: output/demo_cmb_bao
 
 
 # Set the parameter ranges and priors to sample over
@@ -49,8 +49,8 @@ priors:
 # For testing use evaluate (likelihood calculated at one reference point).
 # Otherwise mcmc.
 sampler:
-  mcmc:
-  # evaluate:
+  # mcmc:
+  evaluate:
 
 # Specify the Theory components to use. Here we use cosmpower for the Cl observables
 # but run normal CAMB in the background-only mode (which is fast) for background observables.
@@ -59,6 +59,7 @@ sampler:
 theory:
   cosmopower:
     package_file: ../cosmopower-organization/jense_2024_emulators/jense_2023_cmb_camb_lcdm.yaml
+    root_dir: ../cosmopower-organization/jense_2024_emulators/
     provides: # Force cobaya to use the cosmopower-calculated versions of these
       Cl:
         tt:
