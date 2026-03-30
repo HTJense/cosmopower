@@ -33,6 +33,11 @@ class CosmoPower(BoltzmannBase):
         self._networks = self.parser.restore_networks()
         self._networks_to_eval = []
 
+        self._params_required_by_networks = {}
+
+        for nw in self._networks:
+            self._params_required_by_networks.update({str(p) : None for p in self._networks[nw].parameters})
+
     def must_provide(self, **requirements: dict) -> dict:
         super().must_provide(**requirements)
 
@@ -276,6 +281,11 @@ class CosmoPower(BoltzmannBase):
             cls[k][:2] = 0.0
 
         return cls
+
+
+    def get_requirements(self):
+
+        return self._params_required_by_networks
 
     def get_in_dict(self, dct: dict, path: str) -> Any:
         """
