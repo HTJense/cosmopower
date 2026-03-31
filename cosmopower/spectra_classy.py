@@ -48,7 +48,7 @@ def get_spectra(parser: YAMLParser, state: dict, args: dict = {},
             Dl = Cl * (ell * (ell + 1) / (2 * np.pi))
 
             state[quantity] = Dl[state[quantity + ".modes"]]
-        elif qpath[0] == "Cl_unlensed":
+        elif qpath[0] == "unlensed_Cl":
             spec = qpath[1]
 
             cls = cosmo.raw_cl()
