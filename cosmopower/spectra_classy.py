@@ -1,54 +1,53 @@
 from .parser import YAMLParser
 import numpy as np
-from classy import Class
 
 
-def initialize(parser, extra_args={}):
-
-    cosmo = Class()
+def initialize(parser: YAMLParser, extra_args: dict = {}) -> dict:
+    import classy
 
     state = {}
 
     for quantity in parser.quantities:
         state[quantity + ".modes"] = parser.modes(quantity)
 
+    extra_args["l_max_scalars"] = extra_args.get("l_max_scalars", 2)
+    for quantity in parser.quantities:
+        if parser.modes_label(quantity) == "l" and \
+           extra_args["l_max_scalars"] < parser.modes(quantity).max():
+           extra_args["l_max_scalars"] = parser.modes(quantity).max()
+
     state["code"] = "classy"
-    state["module"] = cosmo
+    state["module"] = classy
     state["params"] = extra_args
     state["derived"] = {}
 
     return state
 
 
-def get_spectra(parser, state, args={}, quantities=[], extra_args={}):
+def get_spectra(parser: YAMLParser, state: dict, args: dict = {},
+                quantities: list = [], extra_args: dict = {}) -> bool:
 
-    cosmo = state["module"]
+    classy = state["module"]
 
-    params = state["params"].copy()
-    params.update(args)
-
-    if "ln10^{10}A_s" in params:
-
-        params["A_s"] = 1.e-10 * np.exp(params["ln10^{10}A_s"])
-
-        del params["ln10^{10}A_s"]
-
-    cosmo.set(params)
-
-    cosmo.compute()
-
-    cls = cosmo.raw_cl()
-    ell = cls["ell"]
+    try:
+        cosmo = classy.Class()
+        cosmo.set(state["params"] | args)
+        cosmo.compute()
+    except classy.CosmoError as e:
+        print(e)
+        return False
 
     for quantity in quantities:
+        qpath = quantity.split("/")
+        if qpath[0] == "Cl":
+            spec = qpath[1]
 
-        spec = quantity.split("/")[1]
+            cls = cosmo.raw_cl()
+            ell = cls["ell"]
+            Cl = cls[spec]
+            Dl = Cl * (ell * (ell + 1) / (2 * np.pi))
 
-        Cl = cls[spec]
-
-        Dl = Cl * (ell * (ell + 1) / (2 * np.pi))
-
-        state[quantity] = Dl[state[quantity + ".modes"]]
+            state[quantity] = Dl[state[quantity + ".modes"]]
 
     cosmo.struct_cleanup()
     cosmo.empty()
