@@ -33,6 +33,10 @@ def classy_args_interpret(parser: YAMLParser, extra_args: dict = {}) -> dict:
     cl_modes = set(extra_args.get("modes", "s").split(" "))
 
     for quantity in parser.quantities:
+        if quantity == "derived":
+            if "sigma8" in parser.computed_parameters:
+                cl_spec.add("mPk")
+
         qpath = quantity.split("/")
         if qpath[0] == "Cl" or qpath[0] == "unlensed_Cl":
             if qpath[1] == "tt" or qpath[1] == "te":
