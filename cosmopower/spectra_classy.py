@@ -33,8 +33,7 @@ def get_spectra(parser: YAMLParser, state: dict, args: dict = {},
         cosmo = classy.Class()
         cosmo.set(state["params"] | args)
         cosmo.compute()
-    except classy.CosmoError as e:
-        print(e)
+    except (classy.CosmoComputationError, classy.CosmoSevereError) as e:
         return False
 
     for quantity in quantities:
