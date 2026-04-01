@@ -40,10 +40,6 @@ networks:
   - quantity: "derived"
     type: NN
     inputs: [ombh2, omch2, cosmomc_theta, ns, logA, tau]
-    log: True
-    modes:
-      label: l
-      range: [2, 2508]
     n_traits:
       n_hidden: [512,512,512,512]
     training:

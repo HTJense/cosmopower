@@ -1,10 +1,11 @@
+from __future__ import annotations
 from .parser import YAMLParser
 import numpy as np
+import classy
+from typing import Sequence
 
 
 def initialize(parser: YAMLParser, extra_args: dict = {}) -> dict:
-    import classy
-
     state = {}
 
     for quantity in parser.quantities:
@@ -18,7 +19,7 @@ def initialize(parser: YAMLParser, extra_args: dict = {}) -> dict:
     state["code"] = "classy"
     state["module"] = classy
     state["params"] = extra_args
-    state["derived"] = {}
+    state["derived"] = {k: np.nan for k in parser.computed_parameters}
 
     return state
 
@@ -49,12 +50,32 @@ def classy_args_interpret(parser: YAMLParser, extra_args: dict = {}) -> dict:
                 extra_args["l_max_tensors"] = max(extra_args["l_max_tensors"],
                                                   parser.modes(quantity).max())
 
-    if "s" not in cl_modes: extra_args.pop("l_max_scalars")
-    if "t" not in cl_modes: extra_args.pop("l_max_tensors")
+    if "s" not in cl_modes:
+        extra_args.pop("l_max_scalars")
+    if "t" not in cl_modes:
+        extra_args.pop("l_max_tensors")
     extra_args["output"] = " ".join(list(cl_spec))
     extra_args["modes"] = " ".join(list(cl_modes))
 
     return extra_args
+
+
+def get_classy_derived(params: dict, cosmo: classy.Class,
+                       parameters: Sequence[str]) -> dict:
+    res = {}
+
+    for p in parameters:
+        if p == "rs_drag":
+            res[p] = cosmo.rs_drag()
+        elif p == "Omega_nu":
+            res[p] = cosmo.Omega_nu
+        elif p == "T_cmb":
+            res[p] = cosmo.T_cmb()
+        else:
+            res[p] = cosmo.get_current_derived_parameters([p])[p]
+
+    return res
+
 
 def get_spectra(parser: YAMLParser, state: dict, args: dict = {},
                 quantities: list = [], extra_args: dict = {}) -> bool:
@@ -68,9 +89,15 @@ def get_spectra(parser: YAMLParser, state: dict, args: dict = {},
     except (classy.CosmoComputationError, classy.CosmoSevereError) as e:
         raise e
 
+    state["derived"] = get_classy_derived(state["params"], cosmo,
+                                          list(state["derived"].keys()))
+
     for quantity in quantities:
         qpath = quantity.split("/")
-        if qpath[0] == "Cl":
+
+        if qpath[0] == "derived":
+            continue
+        elif qpath[0] == "Cl":
             spec = qpath[1]
 
             cls = cosmo.lensed_cl()
