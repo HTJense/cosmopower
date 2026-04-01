@@ -48,13 +48,13 @@ def initialize(parser: YAMLParser, extra_args: dict = {}) -> dict:
 
         # Check that the maximum values for mode ranges matches
         # the requested outputs.
-        if parser.modes_label(quantity) == "l" and \
-           extra_args["lmax"] < parser.modes(quantity).max():
-            extra_args["lmax"] = parser.modes(quantity).max()
+        if parser.modes_label(quantity) == "l":
+           extra_args["lmax"] = max(extra_args["lmax"],
+                                    parser.modes(quantity).max())
 
-        if parser.modes_label(quantity) == "k" and \
-           extra_args["kmax"] < parser.modes(quantity).max():
-            extra_args["kmax"] = parser.modes(quantity).max()
+        if parser.modes_label(quantity) == "k":
+           extra_args["kmax"] = max(extra_args["kmax"],
+                                    parser.modes(quantity).max())
 
         if parser.modes_label(quantity) == "z":
             z1 = extra_args["redshifts"]
