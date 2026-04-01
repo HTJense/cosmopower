@@ -28,8 +28,8 @@ def classy_args_interpret(parser: YAMLParser, extra_args: dict = {}) -> dict:
     extra_args["l_max_tensors"] = extra_args.get("l_max_tensors", 0)
 
     extra_args["lensing"] = "no"
-    cl_spec = set([])
-    cl_modes = set([])
+    cl_spec = set(extra_args.get("output", "").split(" "))
+    cl_modes = set(extra_args.get("modes", "s").split(" "))
 
     for quantity in parser.quantities:
         qpath = quantity.split("/")
@@ -42,18 +42,12 @@ def classy_args_interpret(parser: YAMLParser, extra_args: dict = {}) -> dict:
                 extra_args["lensing"] = "yes"
                 cl_spec.add("lCl")
 
-            cl_modes.add("s")
-            extra_args["l_max_scalars"] = max(extra_args["l_max_scalars"],
-                                              parser.modes(quantity).max())
-        elif qpath[0] == "tensor_Cl":
-            if qpath[1] == "tt" or qpath[1] == "te":
-                cl_spec.add("tCl")
-            if qpath[1] == "te" or qpath[1] == "ee":
-                cl_spec.add("pCl")
-
-            cl_modes.add("t")
-            extra_args["l_max_tensors"] = max(extra_args["l_max_tensors"],
-                                              parser.modes(quantity).max())
+            if "s" in cl_modes:
+                extra_args["l_max_scalars"] = max(extra_args["l_max_scalars"],
+                                                  parser.modes(quantity).max())
+            if "t" in cl_modes:
+                extra_args["l_max_tensors"] = max(extra_args["l_max_tensors"],
+                                                  parser.modes(quantity).max())
 
     if "s" not in cl_modes: extra_args.pop("l_max_scalars")
     if "t" not in cl_modes: extra_args.pop("l_max_tensors")
@@ -85,16 +79,7 @@ def get_spectra(parser: YAMLParser, state: dict, args: dict = {},
             Dl = Cl * (ell * (ell + 1) / (2 * np.pi))
 
             state[quantity] = Dl[state[quantity + ".modes"]]
-        elif qpath[0] == "unlensed_Cl":
-            spec = qpath[1]
-
-            cls = cosmo.raw_cl()
-            ell = cls["ell"]
-            Cl = cls[spec]
-            Dl = Cl * (ell * (ell + 1) / (2 * np.pi))
-
-            state[quantity] = Dl[state[quantity + ".modes"]]
-        elif qpath[0] == "tensor_Cl":
+        elif qpath[0] == "unlensed_Cl" or qpath[0] == "tensor_Cl":
             spec = qpath[1]
 
             cls = cosmo.raw_cl()
