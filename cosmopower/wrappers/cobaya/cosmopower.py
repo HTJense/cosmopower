@@ -198,12 +198,10 @@ class CosmoPower(BoltzmannBase):
                     data[iz] = get_data(used_params)[0, :]
 
                 state["z"] = self.pk_redshifts
-                state[('Pk_grid', True, 'delta_tot', 'delta_tot')] = data
+                state[('Pk_grid', True, 'delta_tot', 'delta_tot')] = data / params['h']**3.
 
             else:
                 data = get_data(used_params)[0, :]
-
-            import pdb; pdb.set_trace()
 
             # if self.parser.is_log(quantity):
             #     data = network.ten_to_predictions_np(used_params)[0, :]
