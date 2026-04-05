@@ -1,6 +1,6 @@
 # Set the location for the sampler outputs
 # (samples, restart, progress files etc).
-output: output/demo_3x2pt
+output: output/demo_desy1clustering_cosmopower
 
 # Set the parameter ranges and priors to sample over
 params:
@@ -9,13 +9,13 @@ params:
   logT_AGN: 7.8
   ombh2:
     prior:
-      min: 0.01
-      max: 0.05
+      min: 0.015
+      max: 0.03
     ref: 0.0225
   omch2:
     prior:
-      min: 0.01
-      max: 0.90
+      min: 0.09
+      max: 0.15
     ref: 0.120
   omegam:
     value: "lambda omch2, ombh2, h: (ombh2 + omch2)/(h*h)"
@@ -28,15 +28,15 @@ params:
     value: "lambda h: 100.0 * h"
   logA:
     prior:
-      min: 2.0
-      max: 4.0
+      min: 2.5
+      max: 3.5
     ref: 3.05
   As:
     value: "lambda logA: 1e-10 * np.exp(logA)"
   ns:
     prior:
-      min: 0.8
-      max: 1.2
+      min: 0.85
+      max: 1.05
     ref: 0.97
   DES_DzL1: 0.0
   DES_DzL2: 0.0
@@ -48,6 +48,17 @@ params:
   DES_b3: 1.65
   DES_b4: 1.8
   DES_b5: 2.0
+  DES_DzS1: 0.0
+  DES_DzS2: 0.0
+  DES_DzS3: 0.0
+  DES_DzS4: 0.0
+  DES_m1: 0.0
+  DES_m2: 0.0
+  DES_m3: 0.0
+  DES_m4: 0.0
+  DES_AIA: 1.
+  DES_alphaIA: 1.
+  DES_z0IA: 0.62
 
 
 # Add an extra prior e.g. this one on tau.
@@ -58,8 +69,9 @@ priors:
 # For testing use evaluate (likelihood calculated at one reference point).
 # Otherwise mcmc.
 sampler:
-  # mcmc:
-  evaluate:
+  mcmc:
+    covmat: output/demo_desy1clustering_camb.covmat
+  # evaluate:
 
 
 # Specify the Theory components to use. Here we use cosmpower for the Cl observables
@@ -87,5 +99,5 @@ theory:
 likelihood:
   # planck_2018_highl_plik.TTTEEE_lite_native:
   #   stop_at_error: True
-  des_y1.clustering:
+  des_y1.joint:
     l_max: 2000

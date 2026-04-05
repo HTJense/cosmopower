@@ -198,7 +198,10 @@ class CosmoPower(BoltzmannBase):
                     data[iz] = get_data(used_params)[0, :]
 
                 state["z"] = self.pk_redshifts
-                state[('Pk_grid', True, 'delta_tot', 'delta_tot')] = data / params['h']**3.
+                if quantity.split('/')[1] == 'lin':
+                    state[('Pk_grid', False, 'delta_tot', 'delta_tot')] = data / params['h']**3.
+                elif quantity.split('/')[1] == 'nonlin':
+                    state[('Pk_grid', True, 'delta_tot', 'delta_tot')] = data / params['h']**3.
 
             else:
                 data = get_data(used_params)[0, :]
