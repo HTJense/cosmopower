@@ -1,6 +1,6 @@
 # Set the location for the sampler outputs
 # (samples, restart, progress files etc).
-output: output/demo_desy1clustering_cosmopower
+output: output/demo_desy1joint_cosmopower
 
 # Set the parameter ranges and priors to sample over
 params:
