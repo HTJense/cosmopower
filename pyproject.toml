@@ -1,0 +1,43 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cosmpower"
+version = "0.2.0"
+description = "Machine Learning - accelerated Bayesian inference"
+readme = "README.md"
+authors = [
+    { name = "Alessio Spurio Mancini", email = "alessio.spuriomancini@rhul.ac.uk" }
+]
+license = { text = "GNU General Public License v3 (GPLv3)" }
+requires-python = ">=3.8"
+classifiers = [
+    "Operating System :: OS Independent",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+]
+dependencies = [
+    "numpy",
+    "astropy>=3.2",
+    "scikit-learn",
+    "tqdm",
+    "gdown",
+    "jupyter",
+    "mkdocs-material",
+    "mkdocstrings",
+    "matplotlib",
+    "pytest",
+    "pyDOE",
+    "h5py",
+    "tensorflow>=2.18",
+    "tensorflow_probability>=0.24",
+    "tf-keras"
+]
+
+[project.urls]
+homepage = "https://alessiospuriomancini.github.io/cosmopower/"
+
+[tool.setuptools.packages.find]
+where = ["."]
+
