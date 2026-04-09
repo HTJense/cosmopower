@@ -934,8 +934,8 @@ class cosmopower_PCAplusNN(tf.keras.Model):
                 ).shuffle(n_training).batch(batch_sizes[i])
 
             # set up training loss
-            validation_loss = [np.infty]
-            best_loss = np.infty
+            validation_loss = [np.inf]
+            best_loss = np.inf
             early_stopping_counter = 0
 
             # loop over epochs
