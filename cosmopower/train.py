@@ -46,14 +46,6 @@ def train_network_NN(parser: YAMLParser, quantity: str, device: str = "",
                             modes=parser.modes(quantity), verbose=True,
                             **settings.get("n_traits", {}))
 
-    print(network.trainable)
-    print("_layers=", network._layers)
-    print("_non_trainable_variables=", network._non_trainable_variables)
-    print("_trainable_variables=", network._trainable_variables)
-    print("layers=", network.layers)
-    print("variables=", network.variables)
-    print("trainable_variables=", network.trainable_variables)
-    
     datasets = [Dataset(parser, quantity, os.path.basename(filename))
                 for filename in filenames]
     training_params = parser.network_training_parameters(quantity)
