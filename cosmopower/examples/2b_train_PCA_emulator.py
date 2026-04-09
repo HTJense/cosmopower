@@ -42,7 +42,7 @@ pca = cosmopower_PCA(parameters=parser.network_input_parameters("Pk/lin"),
 network = cosmopower_PCAplusNN(cp_pca=pca, verbose=True, trainable=True,
                                **settings.get("n_traits", {}))
 
-with tf.device("/device:CPU:0"):
+with tf.device(None):
     network.train(training_data=datasets,
                   filename_saved_model=output_file,
                   validation=validation,

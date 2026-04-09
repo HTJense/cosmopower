@@ -128,21 +128,32 @@ class cosmopower_PCAplusNN(tf.keras.Model):
         self.alphas = []
         self.betas = []
         for i in range(self.n_layers):
-            self.W.append(tf.Variable(
-                tf.random.normal([
-                    self.architecture[i], self.architecture[i + 1]
-                ], 0.0, np.sqrt(2.0 / self.n_parameters)),
-                name="W_" + str(i), trainable=trainable))
-            self.b.append(tf.Variable(tf.zeros([self.architecture[i + 1]]),
-                                      name="b_" + str(i),
-                                      trainable=trainable))
+            self.W.append(self.add_weight(
+                initializer=tf.keras.initializers.RandomNormal(stddev=1e-3),
+                shape=(self.architecture[i], self.architecture[i + 1]),
+                name="W_" + str(i),
+                trainable=trainable
+            ))
+            self.b.append(self.add_weight(
+                initializer="zeros",
+                shape=(self.architecture[i + 1],),
+                name="b_" + str(i),
+                trainable=trainable
+            ))
+
         for i in range(self.n_layers - 1):
-            self.alphas.append(tf.Variable(
-                tf.random.normal([self.architecture[i + 1]]),
-                name="alphas_" + str(i), trainable=trainable))
-            self.betas.append(tf.Variable(
-                tf.random.normal([self.architecture[i + 1]]),
-                name="betas_" + str(i), trainable=trainable))
+            self.alphas.append(self.add_weight(
+                initializer="random_normal",
+                shape=(self.architecture[i + 1],),
+                name="alphas_" + str(i),
+                trainable=trainable
+            ))
+            self.betas.append(self.add_weight(
+                initializer="random_normal",
+                shape=(self.architecture[i + 1],),
+                name="betas_" + str(i),
+                trainable=trainable
+            ))
 
         # restore weights if restoring
         if restore_filename is not None:
