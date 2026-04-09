@@ -67,7 +67,7 @@ def classy_args_interpret(parser: YAMLParser, extra_args: dict = {}) -> dict:
             extra_args["P_k_max_1/Mpc"] = max(extra_args.get("P_k_max_1/Mpc", 1.0), k_max_pk)
 
             if qpath[1] == "nonlin":
-                extra_args["non_linear"] = "yes"
+                extra_args["non_linear"] = "hmcode"
 
     if "s" not in cl_modes or not want_cl:
         extra_args.pop("l_max_scalars")
@@ -75,6 +75,8 @@ def classy_args_interpret(parser: YAMLParser, extra_args: dict = {}) -> dict:
         extra_args.pop("l_max_tensors")
     extra_args["output"] = " ".join(list(cl_spec))
     extra_args["modes"] = " ".join(list(cl_modes))
+
+    print(extra_args)
 
     return extra_args
 
@@ -143,6 +145,10 @@ def get_spectra(parser: YAMLParser, state: dict, args: dict = {},
                 Pk = np.zeros_like(k)
                 for i in range(len(k)):
                     Pk[i] = cosmo.pk_lin(k[i], z_pk)
+            if spec == "nonlin":
+                Pk = np.zeros_like(k)
+                for i in range(len(k)):
+                    Pk[i] = cosmo.pk(k[i], z_pk)
 
             state[quantity] = Pk
 
