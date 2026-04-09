@@ -58,13 +58,16 @@ def classy_args_interpret(parser: YAMLParser, extra_args: dict = {}) -> dict:
         elif qpath[0] == "Pk":
             cl_spec.add("mPk")
             zval = parser.parameter_value("z")
-            if type(zval) == float:
+            if type(zval) is float:
                 z_max_pk = zval
-            elif type(zval) == tuple:
+            elif type(zval) is tuple:
                 z_max_pk = max(zval)
-            extra_args["z_max_pk"] = max(extra_args.get("z_max_pk", 0.0), z_max_pk)
+            extra_args["z_max_pk"] = max(extra_args.get("z_max_pk", 0.0),
+                                         z_max_pk)
             k_max_pk = parser.modes(quantity).max()
-            extra_args["P_k_max_1/Mpc"] = max(extra_args.get("P_k_max_1/Mpc", 1.0), k_max_pk)
+            extra_args["P_k_max_1/Mpc"] = max(extra_args.get("P_k_max_1/Mpc",
+                                                             1.0),
+                                              k_max_pk)
 
             if qpath[1] == "nonlin":
                 extra_args["non_linear"] = "hmcode"
@@ -102,7 +105,7 @@ def get_spectra(parser: YAMLParser, state: dict, args: dict = {},
                 quantities: list = [], extra_args: dict = {}) -> bool:
 
     classy = state["module"]
-    
+
     if "z" in args:
         z_pk = args.pop("z")
 
@@ -143,7 +146,7 @@ def get_spectra(parser: YAMLParser, state: dict, args: dict = {},
         elif qpath[0] == "Pk":
             k = state[quantity + ".modes"]
             spec = qpath[1]
-            
+
             if spec == "lin":
                 Pk = np.zeros_like(k)
                 for i in range(len(k)):
