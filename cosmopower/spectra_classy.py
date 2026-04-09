@@ -111,7 +111,10 @@ def get_spectra(parser: YAMLParser, state: dict, args: dict = {},
         cosmo.set(state["params"] | args)
         cosmo.compute()
     except (classy.CosmoComputationError, classy.CosmoSevereError) as e:
-        raise e
+        print(str(e))
+        cosmo.struct_cleanup()
+        cosmo.empty()
+        return False
 
     state["derived"] = get_classy_derived(state["params"], cosmo,
                                           list(state["derived"].keys()))
