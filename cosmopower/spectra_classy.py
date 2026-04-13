@@ -143,6 +143,8 @@ def get_spectra(parser: YAMLParser, state: dict, args: dict = {},
             ell = cls["ell"]
             Cl = cls[spec]
             Dl = Cl * (ell * (ell + 1) / (2 * np.pi))
+
+            state[quantity] = Dl[state[quantity + ".modes"]]
         elif qpath[0] == "Pk":
             k = state[quantity + ".modes"]
             spec = qpath[1]
