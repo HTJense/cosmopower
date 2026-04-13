@@ -15,7 +15,7 @@ def find_files(parser: YAMLParser, quantity: str) -> np.ndarray:
     import glob
 
     fn = os.path.join(parser.path, "spectra",
-                      quantity.replace("/", "_") + ".*.hdf5")
+                      quantity.replace("/", "_") + ".[0-9]*.hdf5")
 
     return glob.glob(fn)
 

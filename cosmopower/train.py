@@ -25,7 +25,7 @@ def train_network_NN(parser: YAMLParser, quantity: str, device: str = "",
     """
     filenames = glob.glob(os.path.join(parser.path, "spectra",
                                        quantity.replace("/", "_")
-                                       + ".[0-9].hdf5"))
+                                       + ".[0-9]*.hdf5"))
 
     if len(filenames) == 0:
         raise IOError(f"No files found to train quantity {quantity} with.")
@@ -55,7 +55,7 @@ def train_network_NN(parser: YAMLParser, quantity: str, device: str = "",
     else:
         filenames = glob.glob(os.path.join(parser.path, "spectra",
                                            quantity.replace("/", "_") +
-                                           ".validation.[0-9].hdf5"))
+                                           ".validation.[0-9]*.hdf5"))
         validation = [Dataset(parser, quantity, os.path.basename(filename))
                       for filename in filenames]
 
@@ -85,7 +85,7 @@ def train_network_PCAplusNN(parser: YAMLParser, quantity: str,
     """
     filenames = glob.glob(os.path.join(parser.path, "spectra",
                                        quantity.replace("/", "_")
-                                       + ".[0-9].hdf5"))
+                                       + ".[0-9]*.hdf5"))
 
     saved_filename = os.path.join(parser.path, "networks",
                                   parser.network_filename(quantity))
@@ -111,7 +111,7 @@ def train_network_PCAplusNN(parser: YAMLParser, quantity: str,
     else:
         filenames = glob.glob(os.path.join(parser.path, "spectra",
                                            quantity.replace("/", "_") +
-                                           ".validation.[0-9].hdf5"))
+                                           ".validation.[0-9]*.hdf5"))
         validation = [Dataset(parser, quantity, os.path.basename(filename))
                       for filename in filenames]
 
@@ -171,7 +171,7 @@ def show_training(args: Optional[list] = None) -> None:
     for n, quantity in enumerate(plot_quantities):
         filenames = glob.glob(os.path.join(parser.path, "spectra",
                                            quantity.replace("/", "_")
-                                           + ".[0-9].hdf5"))
+                                           + ".[0-9]*.hdf5"))
 
         if len(filenames) == 0:
             raise IOError(f"No files found for {quantity}.")
@@ -273,7 +273,7 @@ def show_validation(args: Optional[list] = None) -> None:
 
         filenames = glob.glob(os.path.join(parser.path, "spectra",
                                            quantity.replace("/", "_")
-                                           + ".validation.[0-9].hdf5"))
+                                           + ".validation.[0-9]*.hdf5"))
 
         if len(filenames) == 0:
             raise IOError(f"No files found for {quantity}.")
@@ -463,7 +463,7 @@ def show_validation(args: Optional[list] = None) -> None:
         ny = (len(parser.computed_parameters) // nx)
 
         filenames = glob.glob(os.path.join(parser.path, "spectra",
-                                           "derived.[0-9].hdf5"))
+                                           "derived.[0-9]*.hdf5"))
 
         if len(filenames) == 0:
             raise IOError("No files found for derived parameters.")
