@@ -159,6 +159,15 @@ def get_spectra(parser: YAMLParser, state: dict, args: dict = {},
                     Pk[i] = cosmo.pk(k[i], z_pk)
 
             state[quantity] = Pk
+        elif qpath[0] == "DA" or qpath[0] == "angular_diameter_distance":
+            z = state[quantity + ".modes"]
+            state[quantity] = cosmo.angular_distance(z)
+        elif qpath[0] == "Hubble":
+            z = state[quantity + ".modes"]
+            state[quantity] = cosmo.Hubble(z)
+        elif qpath[0] == "sigma8":
+            z = state[quantity + ".modes"]
+            state[quantity] = cosmo.sigma(8, z)
 
     cosmo.struct_cleanup()
     cosmo.empty()

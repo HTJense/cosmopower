@@ -275,14 +275,14 @@ def get_spectra(parser: YAMLParser, state: dict, args: dict = {},
                 state["params"], state["results"], parser.modes(qpath[0])
             )
         elif qpath[0] == "DA" or qpath[0] == "angular_diameter_distance":
-            # angular diameter distance
-            state[quantity] = get_camb_sigma8(
+            # angular diameter distance DA(z)
+            state[quantity] = get_camb_angular_diameter_distance(
                 state["params"], state["results"], parser.modes(qpath[0])
             )
         elif qpath[0] in ["Omega_b", "Omega_cdm"]:
             # background evolution of densities
             var = {"Omega_b": "baryon", "Omega_cdm": "cdm"}.get(qpath[0])
-            state[quantity] = get_camb_sigma8(
+            state[quantity] = get_camb_Omega(
                 state["params"], state["results"], parser.modes(qpath[0]), var
             )
         else:
