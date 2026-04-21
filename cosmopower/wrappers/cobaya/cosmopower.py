@@ -341,7 +341,6 @@ class CosmoPower(BoltzmannBase):
 
 
     def get_requirements(self):
-
         return self._params_required_by_networks
 
     def get_in_dict(self, dct: dict, path: str) -> Any:

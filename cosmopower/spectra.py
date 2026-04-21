@@ -59,7 +59,7 @@ def init_boltzmann_code(parser: YAMLParser) -> dict:
     res = {}
 
     code = parser.boltzmann_code
-    extra_args = parser.boltzmann_extra_args
+    extra_args = parser.boltzmann_extra_args or {}
 
     # Try to import the correct python module for spectrum generation
     try:
@@ -256,7 +256,7 @@ def generate_spectra(args: list = None) -> None:
           f"files {first_file}--{last_file}.")
 
     state = init_boltzmann_code(parser)
-    extra_args = parser.boltzmann_extra_args
+    extra_args = parser.boltzmann_extra_args or {}
 
     accepted = 0
     tbar = tqdm.tqdm(np.arange(first, last + 1))
@@ -265,7 +265,7 @@ def generate_spectra(args: list = None) -> None:
 
     for n in tbar:
         tbar.set_description(("" if MPI is None else f"[{rank}] ")
-                             + f"{accepted/max(n,1):.1%} success rate")
+                             + f"{accepted/max(n, 1):.1%} success rate")
 
         boltzmann_params = {k: training[k][n] for k in parser.boltzmann_inputs}
 

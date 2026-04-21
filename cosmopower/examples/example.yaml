@@ -4,7 +4,7 @@ path: example
 emulated_code:
   name: camb
   # which parameters are passed to camb
-  inputs: [ombh2, omch2, H0, ns, As]
+  inputs: [ombh2, omch2, H0, ns, As, z]
   extra_args:
     # Some extra accuracy and speed parameters
     kmax: 20.0

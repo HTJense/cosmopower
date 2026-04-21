@@ -48,13 +48,13 @@ def initialize(parser: YAMLParser, extra_args: dict = {}) -> dict:
 
         # Check that the maximum values for mode ranges matches
         # the requested outputs.
-        if parser.modes_label(quantity) == "l" and \
-           extra_args["lmax"] < parser.modes(quantity).max():
-            extra_args["lmax"] = parser.modes(quantity).max()
+        if parser.modes_label(quantity) == "l":
+            extra_args["lmax"] = max(extra_args["lmax"],
+                                     parser.modes(quantity).max())
 
-        if parser.modes_label(quantity) == "k" and \
-           extra_args["kmax"] < parser.modes(quantity).max():
-            extra_args["kmax"] = parser.modes(quantity).max()
+        if parser.modes_label(quantity) == "k":
+            extra_args["kmax"] = max(extra_args["kmax"],
+                                     parser.modes(quantity).max())
 
         if parser.modes_label(quantity) == "z":
             z1 = extra_args["redshifts"]
@@ -223,11 +223,11 @@ def get_spectra(parser: YAMLParser, state: dict, args: dict = {},
     except (camb.CAMBError, camb.CAMBFortranError):
         return False
 
+    state["derived"] = get_camb_derived(state["params"], state["results"],
+                                        list(state["derived"].keys()))
+
     for quantity in quantities:
         qpath = quantity.split("/")
-
-        state["derived"] = get_camb_derived(state["params"], state["results"],
-                                            list(state["derived"].keys()))
 
         if qpath[0] == "derived":
             continue
@@ -275,14 +275,14 @@ def get_spectra(parser: YAMLParser, state: dict, args: dict = {},
                 state["params"], state["results"], parser.modes(qpath[0])
             )
         elif qpath[0] == "DA" or qpath[0] == "angular_diameter_distance":
-            # angular diameter distance
-            state[quantity] = get_camb_sigma8(
+            # angular diameter distance DA(z)
+            state[quantity] = get_camb_angular_diameter_distance(
                 state["params"], state["results"], parser.modes(qpath[0])
             )
         elif qpath[0] in ["Omega_b", "Omega_cdm"]:
             # background evolution of densities
             var = {"Omega_b": "baryon", "Omega_cdm": "cdm"}.get(qpath[0])
-            state[quantity] = get_camb_sigma8(
+            state[quantity] = get_camb_Omega(
                 state["params"], state["results"], parser.modes(qpath[0]), var
             )
         else:

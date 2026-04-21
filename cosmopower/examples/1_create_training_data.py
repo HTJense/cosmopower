@@ -2,7 +2,7 @@
 
 # Author: A. Spurio Mancini, H. T. Jense
 
-import tqdm
+from tqdm import tqdm
 import numpy as np
 from cosmopower.parser import YAMLParser
 from cosmopower.spectra import init_boltzmann_code, get_boltzmann_spectra
@@ -51,7 +51,8 @@ print(parser.all_parameters)
 samples, validation_samples, testing_samples = \
     parser.get_parameter_samples()
 
-print(samples)
+for k in samples:
+    print(k, samples[k][:10])
 
 parser.save_samples_to_file(samples, validation_samples)
 
@@ -128,7 +129,7 @@ with Dataset(parser, "Pk/lin", "Pk_lin.0.hdf5") as dataset:
             # This function returns False if the sample is invalid, so it's a
             # simple check to discard invalid datapoints.
             network_params = np.array([
-                params[k]
+                samples[k][n]
                 for k in parser.network_input_parameters("Pk/lin")
             ])
             dataset.write_data(n, network_params,
@@ -147,7 +148,7 @@ with Dataset(parser, "Pk/lin", "Pk_lin.validation.0.hdf5") as dataset:
             # This function returns False if the sample is invalid, so it's a
             # simple check to discard invalid datapoints.
             network_params = np.array([
-                params[k]
+                samples[k][n]
                 for k in parser.network_input_parameters("Pk/lin")
             ])
             dataset.write_data(n, network_params,
@@ -163,7 +164,7 @@ with Dataset(parser, "Pk/lin", "Pk_lin.test.0.hdf5") as dataset:
             # This function returns False if the sample is invalid, so it's a
             # simple check to discard invalid datapoints.
             network_params = np.array([
-                params[k]
+                samples[k][n]
                 for k in parser.network_input_parameters("Pk/lin")
             ])
             dataset.write_data(n, network_params,
