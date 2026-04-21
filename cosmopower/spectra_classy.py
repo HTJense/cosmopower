@@ -71,6 +71,15 @@ def classy_args_interpret(parser: YAMLParser, extra_args: dict = {}) -> dict:
 
             if qpath[1] == "nonlin":
                 extra_args["non_linear"] = "hmcode"
+        elif qpath[0] == "sigma8":
+            cl_spec.add("mPk")
+            z = parser.modes(quantity)
+            extra_args["z_max_pk"] = max(extra_args.get("z_max_pk", 0.0),
+                                         z.max())
+            k_max_pk = 1e-1
+            extra_args["P_k_max_1/Mpc"] = max(extra_args.get("P_k_max_1/Mpc",
+                                                             1.0),
+                                              k_max_pk)
 
     if "s" not in cl_modes or not want_cl:
         extra_args.pop("l_max_scalars")
