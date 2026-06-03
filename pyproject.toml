@@ -3,7 +3,7 @@ requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "cosmpower"
+name = "cosmopower"
 version = "0.2.0"
 description = "Machine Learning - accelerated Bayesian inference"
 readme = "README.md"
@@ -22,17 +22,26 @@ dependencies = [
     "astropy>=3.2",
     "scikit-learn",
     "tqdm",
-    "gdown",
-    "jupyter",
-    "mkdocs-material",
-    "mkdocstrings",
     "matplotlib",
-    "pytest",
     "pyDOE",
     "h5py",
     "tensorflow>=2.18",
     "tensorflow_probability>=0.24",
-    "tf-keras"
+    "tf-keras",
+]
+
+[project.optional-dependencies]
+docs = [
+    "mkdocs-material",
+    "mkdocstrings",
+    "pytkdocs[numpy-style]",
+]
+examples = [
+    "jupyter",
+    "gdown",
+]
+dev = [
+    "pytest",
 ]
 
 [project.urls]
