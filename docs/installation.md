@@ -23,6 +23,7 @@ Once inside the environment, you can install ``CosmoPower``:
         cd cosmopower
         pip install .
 
-    To test the installation, you can use
+    To run the test suite, install the development extras and use ``pytest``:
 
+        pip install .[dev]
         pytest
