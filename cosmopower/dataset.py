@@ -170,7 +170,7 @@ class Dataset:
         cast_1d = (type(indices) is int)
         indices = np.atleast_1d(indices)
 
-        entries = np.where(np.in1d(self.file["data"]["indices"][:],
+        entries = np.where(np.isin(self.file["data"]["indices"][:],
                                    indices))[0]
 
         parameters = {
@@ -179,7 +179,7 @@ class Dataset:
         }
 
         if cast_1d:
-            parameters = {k: float(v) for k, v in parameters.items()}
+            parameters = {k: float(v[0]) for k, v in parameters.items()}
 
         return parameters
 
@@ -193,7 +193,7 @@ class Dataset:
         cast_1d = (type(indices) is int)
         indices = np.atleast_1d(indices)
 
-        entries = np.where(np.in1d(self.file["data"]["indices"][:],
+        entries = np.where(np.isin(self.file["data"]["indices"][:],
                                    indices))[0]
         spec = self.file["data"]["spectra"][entries, :]
         if cast_1d:

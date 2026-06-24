@@ -118,22 +118,32 @@ class cosmopower_NN(tf.keras.Model):
         self.alphas = []
         self.betas = []
         for i in range(self.n_layers):
-            self.W.append(tf.Variable(
-                tf.random.normal([
-                    self.architecture[i], self.architecture[i + 1]
-                ], 0.0, 1e-3),
-                name="W_" + str(i), trainable=trainable))
-            self.b.append(tf.Variable(tf.zeros([self.architecture[i + 1]]),
-                                      name="b_" + str(i),
-                                      trainable=trainable))
+            self.W.append(self.add_weight(
+                initializer=tf.keras.initializers.RandomNormal(stddev=1e-3),
+                shape=(self.architecture[i], self.architecture[i + 1]),
+                name="W_" + str(i),
+                trainable=trainable
+            ))
+            self.b.append(self.add_weight(
+                initializer="zeros",
+                shape=(self.architecture[i + 1],),
+                name="b_" + str(i),
+                trainable=trainable
+            ))
 
         for i in range(self.n_layers - 1):
-            self.alphas.append(tf.Variable(
-                tf.random.normal([self.architecture[i + 1]]),
-                name="alphas_" + str(i), trainable=trainable))
-            self.betas.append(tf.Variable(
-                tf.random.normal([self.architecture[i + 1]]),
-                name="betas_" + str(i), trainable=trainable))
+            self.alphas.append(self.add_weight(
+                initializer="random_normal",
+                shape=(self.architecture[i + 1],),
+                name="alphas_" + str(i),
+                trainable=trainable
+            ))
+            self.betas.append(self.add_weight(
+                initializer="random_normal",
+                shape=(self.architecture[i + 1],),
+                name="betas_" + str(i),
+                trainable=trainable
+            ))
 
         # restore weights if restoring
         if restore_filename is not None:
@@ -546,7 +556,6 @@ class cosmopower_NN(tf.keras.Model):
         return 10.**self.rescaled_predictions_np(parameters_dict)
 
     # Infrastructure for network training
-
     @tf.function
     def compute_loss(self, training_parameters: tf.Tensor,
                      training_features: tf.Tensor) -> tf.Tensor:
@@ -595,7 +604,6 @@ class cosmopower_NN(tf.keras.Model):
         """
         # compute loss on the tape
         with tf.GradientTape() as tape:
-
             # loss
             loss = tf.sqrt(
                 tf.reduce_mean(
@@ -888,7 +896,6 @@ class cosmopower_NN(tf.keras.Model):
                 for epoch in t:
                     # loop over batches
                     for theta, feats in training_data:
-
                         # training step: check whether to accumulate gradients
                         # or not (only worth doing this for very large batch
                         # sizes)
