@@ -38,8 +38,9 @@ class CosmoPower(BoltzmannBase):
         for nw in self._networks:
             self._params_required_by_networks.update({str(p) : None for p in self._networks[nw].parameters})
 
-        # z is a special case (not actually a sampled parameter)
-        del(self._params_required_by_networks['z'])
+        if 'z' in self._params_required_by_networks:
+            # z is a special case (not actually a sampled parameter)
+            del(self._params_required_by_networks['z'])
 
     def must_provide(self, **requirements: dict) -> dict:
         super().must_provide(**requirements)
@@ -127,8 +128,9 @@ class CosmoPower(BoltzmannBase):
 
         self.log.debug(f"Will evaluate networks {self._networks_to_eval}")
 
-        # z is a special case (not actually a sampled parameter)
-        del(must_provide['z'])
+        if 'z' in must_provide:
+            # z is a special case (not actually a sampled parameter)
+            del(must_provide['z'])
 
         return must_provide
 
